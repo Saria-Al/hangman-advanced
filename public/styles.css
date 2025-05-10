@@ -1,0 +1,31 @@
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f4f4f4;
+  margin: 40px;
+}
+h1 {
+  color: #333;
+}
+pre {
+  font-size: 18px;
+}
+input[type="text"] {
+  width: 30px;
+  text-align: center;
+}
+button {
+  padding: 10px 20px;
+}
+body.dark-mode {
+  background-color: #222;
+  color: white;
+}
+.dark-mode button {
+  background-color: #555;
+  color: white;
+}
+.dark-mode a {
+  color: #80dfff;
+}

@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hangman Game</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/script.js" defer></script>
+</head>
+<body>
+  <h1>🎯 Hangman Game</h1>
+  <button onclick="toggleMode()">🌓 Toggle Light/Dark Mode</button>
+  <h2>Level: <%= session[:level] || 1 %></h2>
+  <p>Wrong guesses: <%= session[:wrong_guesses] %>/6</p>
+
+  <pre><%= hangman_ascii(session[:wrong_guesses]) %></pre>
+
+  <p>
+    <% session[:word].chars.each do |c| %>
+      <% if session[:guesses].include?(c) %>
+        <%= c %>
+      <% else %>
+        _ 
+      <% end %>
+    <% end %>
+  </p>
+
+  <form action="/guess" method="POST">
+    <input type="text" name="letter" maxlength="1" required>
+    <button type="submit">Guess</button>
+  </form>
+
+  <button onclick="getHint()">💡 Hint</button>
+  <p id="hint-text"></p>
+
+  <% if @sarcasm %>
+    <p style="color: red;"><%= @sarcasm %></p>
+  <% end %>
+
+  <% if @game_won %>
+    <p style="color: green; font-weight: bold;">🎉 You won! Level up! 🎉</p>
+    <audio id="applause" src="/applause.mp3" autoplay></audio>
+  <% elsif @game_lost %>
+    <p style="color: darkred; font-weight: bold;">💀 You lost! The word was "<%= session[:word] %>"</p>
+  <% end %>
+
+  <p><a href="/new">🔄 Restart</a></p>
+</body>
+</html>
