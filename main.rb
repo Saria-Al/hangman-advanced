@@ -1,3 +1,4 @@
+# Added require for Sinatra to fix deployment
 require 'sinatra'
 require 'sinatra/base'
 require 'sinatra/reloader' if development?
