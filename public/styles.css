@@ -1,31 +1,66 @@
-
 body {
   font-family: Arial, sans-serif;
   text-align: center;
   background-color: #f4f4f4;
   margin: 40px;
 }
+
 h1 {
   color: #333;
 }
+
 pre {
   font-size: 18px;
 }
+
 input[type="text"] {
   width: 30px;
   text-align: center;
 }
+
 button {
   padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  background-color: #008cba;
+  color: white;
+  font-weight: bold;
+  margin: 5px;
+  transition: background-color 0.3s ease;
 }
+
+button:hover {
+  background-color: #005f73;
+}
+
+#hint-text {
+  margin-top: 10px;
+  font-style: italic;
+  color: #555;
+}
+
+a {
+  color: #007acc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* 🌙 Dark Mode Styling */
 body.dark-mode {
   background-color: #222;
   color: white;
 }
+
 .dark-mode button {
   background-color: #555;
   color: white;
 }
+
 .dark-mode a {
   color: #80dfff;
 }
