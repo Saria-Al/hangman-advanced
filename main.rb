@@ -13,7 +13,6 @@ class HangmanApp < Sinatra::Base
     set :environment, :production  # يفضل وضعه هكذا في Render
   end
 
-
   WORDS = %w[
     apple banana orange lemon mango peach pear grape melon kiwi
     rocket planet jungle button camera garden window mirror pillow remote
@@ -53,6 +52,8 @@ class HangmanApp < Sinatra::Base
     'whisper' => 'To speak very softly.'
   }
 
+  enable :sessions
+
   helpers do
     def sarcastic_remark
       [
@@ -89,7 +90,7 @@ class HangmanApp < Sinatra::Base
   end
 
   get '/new' do
-    word = WORDS.sample
+    word = HINTS.keys.sample # ✅ نضمن أن الكلمة لها hint
     session[:word] = word
     session[:guesses] = []
     session[:wrong_guesses] = 0
@@ -105,10 +106,7 @@ class HangmanApp < Sinatra::Base
       session[:wrong_guesses] += 1 unless session[:word].include?(letter)
     end
 
-    if game_won?
-      session[:level] += 1
-    end
-
+    session[:level] += 1 if game_won?
     redirect '/game'
   end
 
@@ -122,7 +120,9 @@ class HangmanApp < Sinatra::Base
   get '/hint' do
     session[:hint_used] = true
     content_type :json
-    { hint: HINTS[session[:word]] || "No hint available" }.to_json
+    word = session[:word]
+    hint = word && HINTS[word] ? HINTS[word] : "No hint available"
+    { hint: hint }.to_json
   end
 
   run! if __FILE__ == $PROGRAM_NAME
