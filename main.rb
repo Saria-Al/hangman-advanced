@@ -5,13 +5,14 @@ require 'sinatra/reloader' if development?
 require 'json'
 
 class HangmanApp < Sinatra::Base
-  enable :sessions
+  configure do
+    set :public_folder, File.expand_path('../public', __FILE__)
+    set :views, File.expand_path('../views', __FILE__)
+    set :bind, '0.0.0.0'           # ✅ للسماح بالوصول من خارج
+    set :port, ENV['PORT']         # ✅ لـ Render تحديد البورت
+    set :environment, :production  # يفضل وضعه هكذا في Render
+  end
 
-  set :public_folder, File.dirname(__FILE__) + '/public'
-  set :views, File.dirname(__FILE__) + '/views'
-  set :bind, '0.0.0.0'
-  set :port, ENV['PORT'] || 4567
-  set :environment, :development
 
   WORDS = %w[
     apple banana orange lemon mango peach pear grape melon kiwi
