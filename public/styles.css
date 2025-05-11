@@ -2,6 +2,7 @@ body {
   font-family: Arial, sans-serif;
   text-align: center;
   background-color: #f4f4f4;
+  color: #333;
   margin: 40px;
 }
 
@@ -63,4 +64,8 @@ body.dark-mode {
 
 .dark-mode a {
   color: #80dfff;
+}
+
+.dark-mode #hint-text {
+  color: #ccc;
 }

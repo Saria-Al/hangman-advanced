@@ -1,4 +1,3 @@
-# Added require for Sinatra to fix deployment
 require 'sinatra'
 require 'sinatra/base'
 require 'sinatra/reloader' if development?
@@ -8,9 +7,9 @@ class HangmanApp < Sinatra::Base
   configure do
     set :public_folder, File.expand_path('../public', __FILE__)
     set :views, File.expand_path('../views', __FILE__)
-    set :bind, '0.0.0.0'           # ✅ للسماح بالوصول من خارج
-    set :port, ENV['PORT']         # ✅ لـ Render تحديد البورت
-    set :environment, :production  # يفضل وضعه هكذا في Render
+    set :bind, '0.0.0.0'
+    set :port, ENV['PORT']
+    set :environment, :production
   end
 
   WORDS = %w[
@@ -82,6 +81,15 @@ class HangmanApp < Sinatra::Base
     def game_lost?
       session[:wrong_guesses] >= 6
     end
+
+    # ✅ تستخدم نوع التلميح بناء على مستوى اللعب أو وضع افتراضي
+    def generate_hint(word, guesses)
+      if session[:level] && session[:level] >= 3
+        "The word looks like: " + word.chars.map { |c| guesses.include?(c) ? c : '_' }.join
+      else
+        "The word starts with: #{word[0]}"
+      end
+    end
   end
 
   get '/' do
@@ -90,11 +98,11 @@ class HangmanApp < Sinatra::Base
   end
 
   get '/new' do
-    word = HINTS.keys.sample # ✅ نضمن أن الكلمة لها hint
+    word = WORDS.sample
     session[:word] = word
     session[:guesses] = []
     session[:wrong_guesses] = 0
-    session[:hint_used] = false
+    session[:hint] = nil
     session[:level] ||= 1
     erb :index
   end
@@ -117,12 +125,9 @@ class HangmanApp < Sinatra::Base
     erb :index
   end
 
-  get '/hint' do
-    session[:hint_used] = true
-    content_type :json
-    word = session[:word]
-    hint = word && HINTS[word] ? HINTS[word] : "No hint available"
-    { hint: hint }.to_json
+  post '/hint' do
+    session[:hint] = generate_hint(session[:word], session[:guesses])
+    redirect back
   end
 
   run! if __FILE__ == $PROGRAM_NAME

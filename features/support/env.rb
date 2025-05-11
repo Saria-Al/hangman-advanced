@@ -1,6 +1,8 @@
 require 'capybara/cucumber'
 require 'capybara'
 require 'rspec/expectations'
-require_relative '../../main'  # تأكد من المسار حسب بنية مجلدك
+require 'selenium-webdriver'
+require_relative '../../main'
 
+Capybara.default_driver = :selenium_chrome_headless # أو استخدم :selenium_chrome لعرض المتصفح
 Capybara.app = HangmanApp

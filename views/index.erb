@@ -9,13 +9,17 @@
 <body>
   <h1>🎯 Hangman Game</h1>
   
+  <!-- Toggle Dark/Light Mode -->
   <button onclick="toggleMode()">🌓 Toggle Light/Dark Mode</button>
 
+  <!-- Game Info -->
   <h2>Level: <%= session[:level] || 1 %></h2>
   <p>Wrong guesses: <%= session[:wrong_guesses] %>/6</p>
 
+  <!-- Hangman Drawing -->
   <pre><%= hangman_ascii(session[:wrong_guesses]) %></pre>
 
+  <!-- Word Display -->
   <p>
     <% session[:word].chars.each do |c| %>
       <% if session[:guesses].include?(c) %>
@@ -26,18 +30,30 @@
     <% end %>
   </p>
 
+  <!-- Letter Guess Form -->
   <form action="/guess" method="POST">
     <input type="text" name="letter" maxlength="1" required>
     <button type="submit">Guess</button>
   </form>
 
-  <button onclick="getHint()">💡 Hint</button>
-  <p id="hint-text"><%= session[:hint_used] ? "" : "" %></p>
+  <!-- Hint Section -->
+  <form action="/hint" method="post">
+    <button type="submit">💡 Hint</button>
+  </form>
 
+  <!-- Hint Display with ID for testing -->
+  <p id="hint-text">
+    <% if session[:hint] %>
+      💡 Hint: <%= session[:hint] %>
+    <% end %>
+  </p>
+
+  <!-- Sarcastic Remark -->
   <% if @sarcasm %>
     <p style="color: red;"><%= @sarcasm %></p>
   <% end %>
 
+  <!-- Win/Loss Messages -->
   <% if @game_won %>
     <p style="color: green; font-weight: bold;">🎉 You won! Level up! 🎉</p>
     <audio id="applause" src="/applause.mp3" autoplay></audio>
@@ -45,6 +61,7 @@
     <p style="color: darkred; font-weight: bold;">💀 You lost! The word was "<%= session[:word] %>"</p>
   <% end %>
 
+  <!-- Restart Link -->
   <p><a href="/new">🔄 Restart</a></p>
 </body>
 </html>

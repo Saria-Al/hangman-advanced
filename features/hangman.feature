@@ -15,7 +15,7 @@ Feature: Hangman gameplay
   Scenario: Losing the game
     Given I open the homepage
     When I submit 6 wrong letters
-    Then I should see "You lost"
+Then I should see "💀 You lost!"
 
   Scenario: Toggle dark mode
     Given I open the homepage
