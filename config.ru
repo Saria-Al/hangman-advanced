@@ -1,4 +1,6 @@
-# config.ru
+require 'rubygems'
+require 'bundler'
+Bundler.require
 
 require './main'
-run HangmanApp
+run Sinatra::Application
