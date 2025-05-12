@@ -5,13 +5,26 @@ function toggleMode() {
   localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
 }
 
-// 🚀 On load: apply saved dark mode
+// 🎵 Play applause on win after guessing
+function playWinSound() {
+  const audio = new Audio('/mixkit-ending-show-audience-clapping-478.wav');
+  audio.play();
+}
+
+// 😢 Play sound on loss
+function playLoseSound() {
+  const audio = new Audio('/mixkit-lost-kid-sobbing-474.wav');
+  audio.play();
+}
+
+// 🚀 On load: apply saved dark mode and fetch hint
 window.onload = () => {
+  // Apply saved dark mode preference
   if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark-mode');
   }
 
-  // Load hint dynamically if present
+  // Fetch and show dynamic hint if present
   const hintText = document.getElementById('hint-text');
   if (hintText) {
     fetch('/hint')
@@ -27,16 +40,16 @@ window.onload = () => {
         hintText.textContent = "Failed to load hint.";
       });
   }
+
+  // 🎯 Check win/loss and act accordingly
+  const winText = document.getElementById('winText');
+  const loseText = document.getElementById('loseText');
+
+  if (winText && winText.style.display !== 'none') {
+    playWinSound();
+    setTimeout(() => window.location.href = '/new', 3000);
+  } else if (loseText && loseText.style.display !== 'none') {
+    playLoseSound();
+    alert(`😤 You lost! The correct word was: ${correctWord}`);
+  }
 };
-
-// 🎵 Play applause on win after guessing
-function playWinSound() {
-  const audio = new Audio('/mixkit-ending-show-audience-clapping-478.wav');
-  audio.play();
-}
-
-// 😢 Play sound on loss
-function playLoseSound() {
-  const audio = new Audio('/mixkit-lost-kid-sobbing-474.wav');
-  audio.play();
-}
