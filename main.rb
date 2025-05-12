@@ -160,7 +160,9 @@ helpers do
         </pre>
       STAGE
     ]
-    stages[[wrong_guesses.to_i, stages.size - 1].min]
+  
+    index = [wrong_guesses.to_i, stages.size - 1].min
+    return stages[index]
   end
 
   def generate_hint(word, guesses)
