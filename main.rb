@@ -2,13 +2,14 @@ require 'sinatra'
 require 'sinatra/base'
 require 'sinatra/reloader' if development?
 require 'json'
+require_relative 'game'  # تأكد أن لديك ملف game.rb
 
 class HangmanApp < Sinatra::Base
   configure do
     set :public_folder, File.expand_path('../public', __FILE__)
     set :views, File.expand_path('../views', __FILE__)
     set :bind, '0.0.0.0'
-    set :port, ENV['PORT']
+    set :port, ENV['PORT'] || 4567
     set :environment, :production
   end
 
@@ -75,6 +76,7 @@ class HangmanApp < Sinatra::Base
     end
 
     def game_won?
+      return false if session[:word].nil? || session[:guesses].nil?
       (session[:word].chars - session[:guesses]).empty?
     end
 
@@ -82,7 +84,6 @@ class HangmanApp < Sinatra::Base
       session[:wrong_guesses] >= 6
     end
 
-    # ✅ تستخدم نوع التلميح بناء على مستوى اللعب أو وضع افتراضي
     def generate_hint(word, guesses)
       if session[:level] && session[:level] >= 3
         "The word looks like: " + word.chars.map { |c| guesses.include?(c) ? c : '_' }.join
@@ -119,6 +120,7 @@ class HangmanApp < Sinatra::Base
   end
 
   get '/game' do
+    @game = Game.new(session[:word] || "default", session[:guesses] || [])
     @game_won = game_won?
     @game_lost = game_lost?
     @sarcasm = sarcastic_remark if !@game_won && !@game_lost && session[:wrong_guesses] > 0
