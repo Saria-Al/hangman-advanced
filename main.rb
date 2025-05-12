@@ -91,11 +91,7 @@ helpers do
     return stages[[wrong_guesses.to_i, stages.size - 1].min]
   end
   
-  def play_hangman
-    word = "ruby"
-    guessed = []
-    wrong_guesses = 0
-    max_wrong = 6
+ 
   
     until wrong_guesses > max_wrong || (word.chars - guessed).empty?
       hangman_ascii(wrong_guesses)
