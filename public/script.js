@@ -5,18 +5,19 @@ function toggleMode() {
   localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
 }
 
-// 💡 Fetch a hint from the server
-function getHint() {
-  fetch('/hint')
-    .then(response => response.json())
-    .then(data => {
-      document.getElementById('hint-text').textContent = "💡 Hint: " + data.hint;
-    })
-    .catch(error => {
-      console.error("Failed to load hint:", error);
-      document.getElementById('hint-text').textContent = "Failed to load hint.";
-    });
-}
+fetch('/hint')
+  .then(response => response.text())
+  .then(html => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const newHint = doc.querySelector('#hint-text')?.textContent || "No hint";
+    document.getElementById('hint-text').textContent = newHint;
+  })
+  .catch(error => {
+    console.error("Failed to load hint:", error);
+    document.getElementById('hint-text').textContent = "Failed to load hint.";
+  });
+
 
 // 🚀 On load: apply saved dark mode
 window.onload = () => {
@@ -26,17 +27,13 @@ window.onload = () => {
 };
 
 // 🎵 Play applause on win after guessing
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('form[action="/guess"]');
-  if (form) {
-    form.addEventListener('submit', () => {
-      setTimeout(() => {
-        const winText = document.querySelector('p');
-        const audio = document.getElementById('applause');
-        if (winText && winText.textContent.includes("You won") && audio) {
-          audio.play().catch(e => console.log("Audio blocked:", e));
-        }
-      }, 200); // wait for server to render updated result
-    });
-  }
-});
+function playWinSound() {
+  const audio = new Audio('/mixkit-ending-show-audience-clapping-478.wav');
+  audio.play();
+}
+
+
+function playLoseSound() {
+  const audio = new Audio('/mixkit-lost-kid-sobbing-474.wav');
+  audio.play();
+}

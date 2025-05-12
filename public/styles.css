@@ -12,11 +12,14 @@ h1 {
 
 pre {
   font-size: 18px;
+  margin: 20px auto;
 }
 
 input[type="text"] {
   width: 30px;
   text-align: center;
+  font-size: 18px;
+  padding: 5px;
 }
 
 button {
@@ -38,7 +41,9 @@ button:hover {
 #hint-text {
   margin-top: 10px;
   font-style: italic;
+  font-size: 16px;
   color: #555;
+  min-height: 24px;
 }
 
 a {
@@ -68,4 +73,17 @@ body.dark-mode {
 
 .dark-mode #hint-text {
   color: #ccc;
+}
+
+/* 🎉 Win/Lose Messages */
+.win-message {
+  color: green;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.lose-message {
+  color: darkred;
+  font-weight: bold;
+  font-size: 20px;
 }

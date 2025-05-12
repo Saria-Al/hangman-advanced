@@ -8,7 +8,7 @@
 </head>
 <body>
   <h1>🎯 Hangman Game</h1>
-  
+
   <!-- Toggle Dark/Light Mode -->
   <button onclick="toggleMode()">🌓 Toggle Light/Dark Mode</button>
 
@@ -17,7 +17,7 @@
   <p>Wrong guesses: <%= session[:wrong_guesses] %>/6</p>
 
   <!-- Hangman Drawing -->
-  <pre><%= hangman_ascii(session[:wrong_guesses]) %></pre>
+  <%= hangman_ascii(session[:wrong_guesses]) %>
 
   <!-- Word Display -->
   <p>
@@ -30,18 +30,22 @@
     <% end %>
   </p>
 
-  <!-- Letter Guess Form -->
-  <form action="/guess" method="POST">
-    <input type="text" name="letter" maxlength="1" required>
-    <button type="submit">Guess</button>
-  </form>
+  <!-- Guess Form -->
+  <% unless @game_won || @game_lost %>
+    <form action="/guess" method="POST">
+      <input type="text" name="letter" maxlength="1" required>
+      <button type="submit">Guess</button>
+    </form>
+  <% end %>
 
   <!-- Hint Section -->
-  <form action="/hint" method="post">
-    <button type="submit">💡 Hint</button>
-  </form>
+  <% unless @game_won || @game_lost %>
+    <form action="/hint" method="POST">
+      <button type="submit">💡 Hint</button>
+    </form>
+  <% end %>
 
-  <!-- Hint Display with ID for testing -->
+  <!-- Display Hint if exists -->
   <p id="hint-text">
     <% if session[:hint] %>
       💡 Hint: <%= session[:hint] %>
@@ -53,15 +57,21 @@
     <p style="color: red;"><%= @sarcasm %></p>
   <% end %>
 
-  <!-- Win/Loss Messages -->
-  <% if @game_won %>
-    <p style="color: green; font-weight: bold;">🎉 You won! Level up! 🎉</p>
-    <audio id="applause" src="/applause.mp3" autoplay></audio>
-  <% elsif @game_lost %>
-    <p style="color: darkred; font-weight: bold;">💀 You lost! The word was "<%= session[:word] %>"</p>
-  <% end %>
+<audio id="win-sound">
+  <source src="/applause.mp3" type="audio/mpeg">
+  <source src="/applause.ogg" type="audio/ogg">
+  Your browser does not support the audio element.
+</audio>
 
-  <!-- Restart Link -->
+  <!-- Result Messages -->
+  <% if @game.won? %>
+  <script>playWinSound();</script>
+<% elsif @game.lost? %>
+  <script>playLoseSound();</script>
+<% end %>
+
+
+  <!-- Restart Button -->
   <p><a href="/new">🔄 Restart</a></p>
 </body>
 </html>
