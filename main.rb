@@ -1,8 +1,9 @@
 require 'sinatra'
-require './lib/hangperson_game'  # تأكد من أن هذا المسار صحيح
+require './lib/hangperson_game'
 require 'json'
 
 use Rack::Session::Cookie, secret: 'a_very_secure_super_long_key_that_is_definitely_more_than_sixty_four_characters_long_1234567890'
+
 helpers do
   def get_game
     session[:game] ||= HangpersonGame.new('')
@@ -90,32 +91,6 @@ helpers do
     ]
     return stages[[wrong_guesses.to_i, stages.size - 1].min]
   end
-  
- 
-  
-    until wrong_guesses > max_wrong || (word.chars - guessed).empty?
-      hangman_ascii(wrong_guesses)
-      display_word = word.chars.map { |c| guessed.include?(c) ? c : "_" }.join(" ")
-      puts "الكلمة: #{display_word}"
-      print "أدخل حرفًا: "
-      guess = gets.chomp.downcase
-      if word.include?(guess)
-        guessed << guess unless guessed.include?(guess)
-      else
-        wrong_guesses += 1
-      end
-    end
-  
-    if (word.chars - guessed).empty?
-      puts "تهانينا! لقد فزت!"
-    else
-      hangman_ascii(wrong_guesses)
-      puts "لقد خسرت. الكلمة كانت: #{word}"
-    end
-  end
-  
-  play_hangman  
-  
 
   def generate_hint(word, guesses)
     if session[:level] && session[:level] >= 3
@@ -124,7 +99,19 @@ helpers do
       "The word starts with: #{word[0]}"
     end
   end
+
+  def sarcastic_remark
+    [
+      "😏 Really? That was your guess?",
+      "🙄 My pet rock could guess better.",
+      "😬 Try using your brain this time.",
+      "😅 You're making this way too easy for the hangman.",
+      "🤣 Are you even trying?"
+    ].sample
+  end
 end
+
+# ROUTES
 
 get '/' do
   game = get_game
@@ -165,4 +152,3 @@ post '/hint' do
   session[:hint] = generate_hint(game.word, game.guesses)
   redirect '/'
 end
-
