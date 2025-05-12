@@ -81,8 +81,86 @@ helpers do
   end
 
   def hangman_ascii(wrong_guesses)
-    stages = [ # نفس الرسومات الطويلة السابقة ]
-    return stages[[wrong_guesses.to_i, stages.size - 1].min]
+    stages = [
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+            |
+            |
+            |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+            |
+            |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+        |   |
+            |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+       /|   |
+            |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+       /|\\  |
+            |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+       /|\\  |
+       /    |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+       /|\\  |
+       / \\  |
+            |
+        =====
+        </pre>
+      STAGE
+    ]
+    stages[[wrong_guesses.to_i, stages.size - 1].min]
   end
 
   def generate_hint(word, guesses)
@@ -99,9 +177,8 @@ helpers do
       "🙄 seriously? Is this all you can do?",
       "😬 Try using your brain this time.",
       "😅 You're making this way too easy for the hangman.",
-      "🤣 Are you even trying?"
-      "😏 Are you wishing or guessing?",
-
+      "🤣 Are you even trying?",
+      "😏 Are you wishing or guessing?"
     ].sample
   end
 end
