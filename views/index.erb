@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Hangman Game</title>
+  <title>Hangman Game 🎯</title>
   <link rel="stylesheet" href="/styles.css">
   <script src="/script.js" defer></script>
 </head>
@@ -20,7 +20,7 @@
   <%= hangman_ascii(session[:wrong_guesses]) %>
 
   <!-- Word Display -->
-  <p>
+  <p style="font-size: 1.5em;">
     <% session[:word].chars.each do |c| %>
       <% if session[:guesses].include?(c) %>
         <%= c %>
@@ -34,7 +34,7 @@
   <% unless @game_won || @game_lost %>
     <form action="/guess" method="POST">
       <input type="text" name="letter" maxlength="1" required>
-      <button type="submit">Guess</button>
+      <button type="submit">🔠 Guess</button>
     </form>
   <% end %>
 
@@ -45,33 +45,40 @@
     </form>
   <% end %>
 
-  <!-- Display Hint if exists -->
-  <p id="hint-text">
-    <% if session[:hint] %>
-      💡 Hint: <%= session[:hint] %>
-    <% end %>
-  </p>
+  <!-- Display Hint -->
+  <% if session[:hint] %>
+    <p id="hint-text">💡 Hint: <%= session[:hint] %></p>
+  <% end %>
 
   <!-- Sarcastic Remark -->
   <% if @sarcasm %>
-    <p style="color: red;"><%= @sarcasm %></p>
+    <p style="color: red;">💬 <%= @sarcasm %></p>
   <% end %>
 
-<audio id="win-sound">
-  <source src="/applause.mp3" type="audio/mpeg">
-  <source src="/applause.ogg" type="audio/ogg">
-  Your browser does not support the audio element.
-</audio>
-
   <!-- Result Messages -->
-  <% if @game.won? %>
+  <% if defined?(@game) && @game && @game.won? %>
+  <p style="color: green;"><strong>🎉 Congratulations! You won!</strong></p>
   <script>playWinSound();</script>
-<% elsif @game.lost? %>
+<% elsif defined?(@game) && @game && @game.lost? %>
+  <p style="color: red;"><strong>😞 Sorry! You lost. The word was: <%= session[:word] %></strong></p>
   <script>playLoseSound();</script>
 <% end %>
 
 
   <!-- Restart Button -->
-  <p><a href="/new">🔄 Restart</a></p>
+  <form action="/new" method="post">
+    <button>🔄 Start New Game</button>
+  </form>
+
+  <!-- Sound Effects -->
+  <audio id="win-sound">
+    <source src="/mixkit-ending-show-audience-clapping-478.wav" type="audio/wav">
+    Your browser does not support the audio element.
+  </audio>
+
+  <audio id="lose-sound">
+    <source src="/mixkit-lost-kid-sobbing-474.wav" type="audio/wav">
+    Your browser does not support the audio element.
+  </audio>
 </body>
 </html>
