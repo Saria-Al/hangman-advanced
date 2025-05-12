@@ -17,7 +17,7 @@
   <p>Wrong guesses: <%= session[:wrong_guesses] %>/6</p>
 
   <!-- Hangman Drawing -->
-  <%= hangman_ascii(session[:wrong_guesses]) %>
+  <%= @ascii %>
 
   <!-- Word Display -->
   <p style="font-size: 1.5em;">

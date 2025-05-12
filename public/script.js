@@ -5,24 +5,27 @@ function toggleMode() {
   localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
 }
 
-fetch('/hint')
-  .then(response => response.text())
-  .then(html => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const newHint = doc.querySelector('#hint-text')?.textContent || "No hint";
-    document.getElementById('hint-text').textContent = newHint;
-  })
-  .catch(error => {
-    console.error("Failed to load hint:", error);
-    document.getElementById('hint-text').textContent = "Failed to load hint.";
-  });
-
-
 // 🚀 On load: apply saved dark mode
 window.onload = () => {
   if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark-mode');
+  }
+
+  // Load hint dynamically if present
+  const hintText = document.getElementById('hint-text');
+  if (hintText) {
+    fetch('/hint')
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newHint = doc.querySelector('#hint-text')?.textContent || "No hint";
+        hintText.textContent = newHint;
+      })
+      .catch(error => {
+        console.error("Failed to load hint:", error);
+        hintText.textContent = "Failed to load hint.";
+      });
   }
 };
 
@@ -32,7 +35,7 @@ function playWinSound() {
   audio.play();
 }
 
-
+// 😢 Play sound on loss
 function playLoseSound() {
   const audio = new Audio('/mixkit-lost-kid-sobbing-474.wav');
   audio.play();

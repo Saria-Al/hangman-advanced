@@ -1,10 +1,10 @@
 class HangpersonGame
   attr_reader :word, :guesses, :wrong_guesses
 
-  def initialize(word)
+  def initialize(word, guesses = [], wrong_guesses = [])
     @word = word.downcase
-    @guesses = []
-    @wrong_guesses = []
+    @guesses = guesses
+    @wrong_guesses = wrong_guesses
   end
 
   def guess(letter)
@@ -24,22 +24,15 @@ class HangpersonGame
     @word.chars.map { |c| @guesses.include?(c) ? c : '_' }.join
   end
 
-  def check_win_or_lose
-    return :win if word_with_guesses == @word
-    return :lose if @wrong_guesses.length >= 7
-    :play
-  end
-
-  def self.get_random_word
-    # You can replace this list with a real API or file read
-    %w[apple banana orange mango pyramid python garden thunder].sample
-  end
-
   def won?
     word_with_guesses == @word
   end
 
   def lost?
     @wrong_guesses.length >= 7
+  end
+
+  def self.get_random_word
+    %w[apple banana orange mango thunder shadow rainbow cozy freedom courage mountain].sample
   end
 end
