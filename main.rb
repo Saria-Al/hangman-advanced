@@ -26,8 +26,13 @@ helpers do
       "<pre>  +---+\n  O   |\n /|\\  |\n /    |\n     ===</pre>",
       "<pre>  +---+\n  O   |\n /|\\  |\n / \\  |\n     ===</pre>"
     ]
-    stages[[wrong_guesses, stages.size - 1].min]
+  
+    # تأكد أنه عدد صحيح وآمن
+    index = wrong_guesses.to_i rescue 0
+    index = [index, stages.size - 1].min
+    stages[index]
   end
+  
 
   def generate_hint(word, guesses)
     if session[:level] && session[:level] >= 3
