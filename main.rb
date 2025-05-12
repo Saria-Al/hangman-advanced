@@ -3,35 +3,122 @@ require './lib/hangperson_game'  # تأكد من أن هذا المسار صحي
 require 'json'
 
 use Rack::Session::Cookie, secret: 'a_very_secure_super_long_key_that_is_definitely_more_than_sixty_four_characters_long_1234567890'
-
 helpers do
   def get_game
     session[:game] ||= HangpersonGame.new('')
   end
 
-  def sarcastic_remark
-    [
-      "Seriously?", "Try harder!", "You're killing me!",
-      "Is this guessing or wishing?", "Are you even trying?"
-    ].sample
-  end
-
   def hangman_ascii(wrong_guesses)
     stages = [
-      "<pre>  +---+\n      |\n      |\n      |\n     ===</pre>",
-      "<pre>  +---+\n  O   |\n      |\n      |\n     ===</pre>",
-      "<pre>  +---+\n  O   |\n  |   |\n      |\n     ===</pre>",
-      "<pre>  +---+\n  O   |\n /|   |\n      |\n     ===</pre>",
-      "<pre>  +---+\n  O   |\n /|\\  |\n      |\n     ===</pre>",
-      "<pre>  +---+\n  O   |\n /|\\  |\n /    |\n     ===</pre>",
-      "<pre>  +---+\n  O   |\n /|\\  |\n / \\  |\n     ===</pre>"
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+            |
+            |
+            |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+            |
+            |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+        |   |
+            |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+       /|   |
+            |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+       /|\\  |
+            |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+       /|\\  |
+       /    |
+            |
+        =====
+        </pre>
+      STAGE
+      <<~STAGE,
+        <pre>
+        +---+
+        |   |
+        O   |
+       /|\\  |
+       / \\  |
+            |
+        =====
+        </pre>
+      STAGE
     ]
-  
-    # تأكد أنه عدد صحيح وآمن
-    index = wrong_guesses.to_i rescue 0
-    index = [index, stages.size - 1].min
-    stages[index]
+    return stages[[wrong_guesses.to_i, stages.size - 1].min]
   end
+  
+  def play_hangman
+    word = "ruby"
+    guessed = []
+    wrong_guesses = 0
+    max_wrong = 6
+  
+    until wrong_guesses > max_wrong || (word.chars - guessed).empty?
+      hangman_ascii(wrong_guesses)
+      display_word = word.chars.map { |c| guessed.include?(c) ? c : "_" }.join(" ")
+      puts "الكلمة: #{display_word}"
+      print "أدخل حرفًا: "
+      guess = gets.chomp.downcase
+      if word.include?(guess)
+        guessed << guess unless guessed.include?(guess)
+      else
+        wrong_guesses += 1
+      end
+    end
+  
+    if (word.chars - guessed).empty?
+      puts "تهانينا! لقد فزت!"
+    else
+      hangman_ascii(wrong_guesses)
+      puts "لقد خسرت. الكلمة كانت: #{word}"
+    end
+  end
+  
+  play_hangman  
   
 
   def generate_hint(word, guesses)
