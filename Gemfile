@@ -1,16 +1,15 @@
 source 'https://rubygems.org'
 
-# Gems for main application (production/development)
+ruby '3.2.2' # يمكن حذفه إذا حدثت مشاكل
+
 gem 'sinatra'
 gem 'puma'
-gem 'rackup'
 
-# Gems for testing only
 group :test do
   gem 'rspec'
   gem 'cucumber'
   gem 'capybara'
-  gem 'selenium-webdriver'  # << Move this inside :test
+  gem 'selenium-webdriver'
 end
 
 group :development do
