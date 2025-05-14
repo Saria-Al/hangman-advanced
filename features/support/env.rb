@@ -5,4 +5,4 @@ require 'selenium-webdriver'
 require_relative '../../main'
 
 Capybara.default_driver = :selenium_chrome_headless # أو استخدم :selenium_chrome لعرض المتصفح
-Capybara.app = HangmanApp
+Capybara.app = Sinatra::Application
