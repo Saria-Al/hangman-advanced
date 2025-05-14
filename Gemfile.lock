@@ -120,6 +120,7 @@ DEPENDENCIES
   capybara
   cucumber
   puma
+  rack
   rspec
   selenium-webdriver
   sinatra

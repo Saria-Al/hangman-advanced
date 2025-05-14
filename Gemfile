@@ -4,6 +4,8 @@ ruby '3.2.2' # يمكن حذفه إذا حدثت مشاكل
 
 gem 'sinatra'
 gem 'puma'
+gem 'rack'
+
 
 group :test do
   gem 'rspec'
