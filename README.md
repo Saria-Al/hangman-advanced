@@ -15,10 +15,8 @@ A smart hangman game with levels, sarcasm, hints, and light/dark mode – built 
 - **Environment:** Ruby
 - **Port:** 9292 (automatically handled by $PORT on Render)
 
-6. Click **"Deploy"** and wait a minute ⏳
-
 You’ll get a public URL like:  
-👉 https://your-hangman-app.onrender.com
+👉 https://hangman-app-s1ec.onrender.com
 
 ## 🎮 Features
 
